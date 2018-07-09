@@ -12,6 +12,8 @@ const screenChangeEvents = [
   'webkitfullscreenchange'
 ];
 
+const supportsSrcSet = 'srcset' in document.createElement('img')
+
 export default class ImageGallery extends React.Component {
 
   constructor(props) {
@@ -882,10 +884,20 @@ export default class ImageGallery extends React.Component {
             </picture>
           :
             <img
-              src={item.original}
-              alt={item.originalAlt}
-              srcSet={item.srcSet}
+              /*
+                Order of `sizes`, `srcSet` and `src` is important to avoid
+                unnecessary requests of every image in a `srcSet` in Safari.
+                Similarly, not adding `src` when we have a `srcSet` and the
+                browser supports it avoids an unnecessary request in Safari
+                when `lazyLoad` is in effect. Safari seems super eager
+                to start downloading images the moment an `HTMLImageElement`
+                `src` or `srcSet` is updated.
+              */
               sizes={item.sizes}
+              srcSet={item.srcSet}
+              src={item.srcSet && supportsSrcSet ? null : item.original}
+
+              alt={item.originalAlt}
               title={item.originalTitle}
               onLoad={this.props.onImageLoad}
               onError={onImageError}
