@@ -1,5 +1,5 @@
 {
-  "name": "react-image-gallery",
+  "name": "@limulus/react-image-gallery",
   "version": "0.8.9",
   "description": "React carousel image gallery component with thumbnail and mobile support",
   "main": "./build/image-gallery.js",
