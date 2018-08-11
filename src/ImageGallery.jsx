@@ -32,10 +32,6 @@ export default class ImageGallery extends React.Component {
     this.slideToIndex = throttle(this._unthrottledSlideToIndex,
                                  props.slideDuration,
                                 {trailing: false});
-
-    if (props.lazyLoad) {
-      this._lazyLoaded = [];
-    }
   }
 
   static propTypes = {
@@ -167,11 +163,6 @@ export default class ImageGallery extends React.Component {
       } else {
         window.addEventListener('keydown', this._handleKeyDown);
       }
-    }
-
-    if (nextProps.lazyLoad &&
-      (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
-      this._lazyLoaded = [];
     }
 
     if (this.state.currentIndex >= nextProps.items.length) {
@@ -966,10 +957,7 @@ export default class ImageGallery extends React.Component {
       const renderThumbInner = item.renderThumbInner ||
         this.props.renderThumbInner || this._renderThumbInner;
 
-      const showItem = !this.props.lazyLoad || alignment || this._lazyLoaded[index];
-      if (showItem && this.props.lazyLoad) {
-        this._lazyLoaded[index] = true;
-      }
+      const showItem = !this.props.lazyLoad || alignment;
 
       let slideStyle = this._getSlideStyle(index);
 
